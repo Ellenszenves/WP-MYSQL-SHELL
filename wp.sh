@@ -15,6 +15,7 @@ sudo apt install -y apache2 \
                  php-zip
 sudo mkdir -p /srv/www
 sudo chown www-data: /srv/www
+sudo apt-get install -y curl
 curl https://wordpress.org/latest.tar.gz | sudo -u www-data tar zx -C /srv/www
 sudo touch /etc/apache2/sites-available/wordpress.conf
 sudo chmod 666 /etc/apache2/sites-available/wordpress.conf
@@ -36,8 +37,12 @@ sudo a2enmod rewrite
 sudo a2dissite 000-default
 sudo service apache2 reload
 sudo -u www-data cp /srv/www/wordpress/wp-config-sample.php /srv/www/wordpress/wp-config.php
-sudo -u www-data sed -i 's/database_name_here/wordpress/' /srv/www/wordpress/wp-config.php
-sudo -u www-data sed -i 's/username_here/wordpress/' /srv/www/wordpress/wp-config.php
-sudo -u www-data sed -i 's/password_here/ubuntu/' /srv/www/wordpress/wp-config.php
-sudo -u www-data sed -i 's/localhost/192.168.0.94/' /srv/www/wordpress/wp-config.php
+read -p "Adatbázis neve:" dataname
+sudo -u www-data sed -i "s/database_name_here/$dataname/" /srv/www/wordpress/wp-config.php
+read -p "MySQL felhasználónév:" username
+sudo -u www-data sed -i "s/username_here/$username/" /srv/www/wordpress/wp-config.php
+read -p "MySQL jelszó:" sqlpass
+sudo -u www-data sed -i "s/password_here/$sqlpass/" /srv/www/wordpress/wp-config.php
+read -p "MySQL IP cím:" ipaddr
+sudo -u www-data sed -i "s/localhost/$ipaddr/" /srv/www/wordpress/wp-config.php
 
